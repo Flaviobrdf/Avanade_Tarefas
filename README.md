@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AvanadeTarefas
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.23.
@@ -57,3 +58,7 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+=======
+# Avanade_Tarefas
+Aplicação web simples para cadastro e gerenciamento de tarefas (Angular no front-end, ASP.NET Core Web API no back-end e SQL Server como banco de dados).
+>>>>>>> 33c6b3bdade18ba9956dab198d7d9581df8075cc
