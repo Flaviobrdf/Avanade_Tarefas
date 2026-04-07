@@ -1,0 +1,6 @@
+@AvanadeTarefasApi_HostAddress = http://localhost:5184
+
+GET {{AvanadeTarefasApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
