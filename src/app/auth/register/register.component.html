@@ -1,0 +1,24 @@
+<div class="register-wrapper">
+  <div class="register-card">
+    <h2>Registrar</h2>
+    <form (submit)="onSubmit($event)">
+      <div class="form-group">
+        <label>Nome</label>
+        <input type="text" name="name" required />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" required />
+      </div>
+
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" name="password" required />
+      </div>
+
+      <button type="submit" class="btn-primary">Criar Conta</button>
+      <button type="button" class="btn-secondary" (click)="onLogin()">Já tenho conta</button>
+    </form>
+  </div>
+</div>

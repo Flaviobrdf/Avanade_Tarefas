@@ -1,25 +1,23 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class LoginComponent {
-  constructor(private router: Router) {}
-
+export class RegisterComponent {
   onSubmit(event: Event) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
+    const name = (form.elements.namedItem('name') as HTMLInputElement).value;
     const email = (form.elements.namedItem('email') as HTMLInputElement).value;
     const password = (form.elements.namedItem('password') as HTMLInputElement).value;
 
-    console.log('Tentando login com:', email, password);
+    console.log('Tentando registrar:', name, email, password);
   }
 
-  onRegister() {
-    this.router.navigate(['/register']);
+  onLogin() {
+    console.log('Voltar para tela de login');
   }
 }
