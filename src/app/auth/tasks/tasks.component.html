@@ -1,0 +1,13 @@
+<form (ngSubmit)="addTask(title.value, description.value)">
+  <div class="form-group">
+    <label>Título</label>
+    <input type="text" #title required />
+  </div>
+
+  <div class="form-group">
+    <label>Descrição</label>
+    <textarea #description required></textarea>
+  </div>
+
+  <button type="submit" class="btn-primary">Adicionar Tarefa</button>
+</form>
