@@ -4582,11 +4582,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Flavio\\Desktop\\Estudos\\Avanade-Tarefas\\Avanade_tarefas\\backend\\AvanadeTarefasApi\\AvanadeTarefasApi.csproj",
+      "projectUniqueName": "C:\\Users\\Flavio\\Desktop\\Estudos\\Avanade-Tarefas\\Avanade_Tarefas\\backend\\AvanadeTarefasApi\\AvanadeTarefasApi.csproj",
       "projectName": "AvanadeTarefasApi",
-      "projectPath": "C:\\Users\\Flavio\\Desktop\\Estudos\\Avanade-Tarefas\\Avanade_tarefas\\backend\\AvanadeTarefasApi\\AvanadeTarefasApi.csproj",
+      "projectPath": "C:\\Users\\Flavio\\Desktop\\Estudos\\Avanade-Tarefas\\Avanade_Tarefas\\backend\\AvanadeTarefasApi\\AvanadeTarefasApi.csproj",
       "packagesPath": "C:\\Users\\Flavio\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Flavio\\Desktop\\Estudos\\Avanade-Tarefas\\Avanade_tarefas\\backend\\AvanadeTarefasApi\\obj\\",
+      "outputPath": "C:\\Users\\Flavio\\Desktop\\Estudos\\Avanade-Tarefas\\Avanade_Tarefas\\backend\\AvanadeTarefasApi\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Flavio\\AppData\\Roaming\\NuGet\\NuGet.Config"

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 interface Task {
   title: string;
@@ -17,6 +18,12 @@ interface Task {
 })
 export class TasksComponent {
   tasks: Task[] = [];
+  username: string | null = null;
+
+  constructor(private router: Router) {
+    // Recupera o nome do usuário salvo no localStorage
+    this.username = localStorage.getItem('username');
+  }
 
   addTask(title: string, description: string) {
     const newTask: Task = {
@@ -30,5 +37,11 @@ export class TasksComponent {
 
   toggleStatus(task: Task) {
     task.status = task.status === 'Pendente' ? 'Concluída' : 'Pendente';
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    this.router.navigate(['/login']);
   }
 }

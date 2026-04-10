@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AvanadeTarefasApi.Data;
 using AvanadeTarefasApi.Models;
+using System.Linq;
+
+
 
 namespace AvanadeTarefasApi.Controllers
 {

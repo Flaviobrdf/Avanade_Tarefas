@@ -1,3 +1,4 @@
+
 namespace AvanadeTarefasApi.Models
 {
     public class User
@@ -7,3 +8,5 @@ namespace AvanadeTarefasApi.Models
         public string Password { get; set; } = string.Empty;
     }
 }
+
+

@@ -1,3 +1,8 @@
+<div class="tasks-header">
+  <span>Bem-vindo, {{ username }}</span>
+  <button class="btn-secondary" (click)="logout()">Sair</button>
+</div>
+
 <form (ngSubmit)="addTask(title.value, description.value)">
   <div class="form-group">
     <label>Título</label>
@@ -11,3 +16,4 @@
 
   <button type="submit" class="btn-primary">Adicionar Tarefa</button>
 </form>
+

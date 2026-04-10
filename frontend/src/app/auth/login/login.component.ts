@@ -14,20 +14,22 @@ export class LoginComponent {
   onSubmit(event: Event) {
     event.preventDefault();
     const form = event.target as HTMLFormElement;
-    const email = (form.elements.namedItem('email') as HTMLInputElement).value;
+    const username = (form.elements.namedItem('username') as HTMLInputElement).value; 
     const password = (form.elements.namedItem('password') as HTMLInputElement).value;
 
-    this.authService.login(email, password).subscribe({
+    this.authService.login(username, password).subscribe({
       next: (res: any) => {
-        console.log('Login OK', res);
+        alert('Login realizado com sucesso!');
         localStorage.setItem('token', res.token);
-        // aqui você pode redirecionar para /tasks, por exemplo
+        localStorage.setItem('username', res.username); 
         this.router.navigate(['/tasks']);
       },
       error: err => {
-        console.error('Login falhou', err);
+        alert(err.error.message || 'Falha no login. Verifique suas credenciais.');
+        console.error(err);
       }
     });
+
   }
 
   onRegister() {
