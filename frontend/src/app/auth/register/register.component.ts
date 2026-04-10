@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -8,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   onSubmit(event: Event) {
     event.preventDefault();
@@ -16,22 +17,24 @@ export class RegisterComponent {
     const username = (form.elements.namedItem('username') as HTMLInputElement).value;
     const password = (form.elements.namedItem('password') as HTMLInputElement).value;
 
-    const user = { username: username, password: password };
+    const user = { Username: username, Password: password };
 
     this.http.post('http://localhost:5184/api/users/register', user)
       .subscribe({
-        next: (res) => {
-          alert('Cadastro realizado com sucesso!');
+        next: (res: any) => {
+          alert(res.message || 'Cadastro realizado com sucesso!');
           console.log('Resposta da API:', res);
+          this.router.navigate(['/login']); 
         },
         error: (err) => {
-          alert('Erro ao cadastrar usuário.');
+          alert(err.error.message || 'Erro ao cadastrar usuário.');
           console.error(err);
         }
       });
   }
 
+  
   onLogin() {
-    console.log('Voltar para tela de login');
+    this.router.navigate(['/login']);
   }
 }

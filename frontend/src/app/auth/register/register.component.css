@@ -13,6 +13,7 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   width: 100%;
   max-width: 400px;
+  margin: auto;
 }
 
 .register-card h2 {
@@ -37,6 +38,7 @@
   padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 button {

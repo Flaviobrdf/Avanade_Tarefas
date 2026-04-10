@@ -16,7 +16,7 @@ namespace AvanadeTarefasApi.Controllers
             _context = context;
         }
 
-        [HttpPost("login")] // <-- ESSENCIAL
+        [HttpPost("login")] 
         public IActionResult Login([FromBody] User login)
         {
             var user = _context.Users
@@ -29,5 +29,19 @@ namespace AvanadeTarefasApi.Controllers
             var token = Guid.NewGuid().ToString();
             return Ok(new { token, username = user.Username });
         }
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] User newUser)
+        {
+            if (_context.Users.Any(u => u.Username == newUser.Username))
+            {
+                return BadRequest(new { message = "Usuário já existe." });
+            }
+
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
+
+            return Ok(new { message = "Usuário registrado com sucesso!" });
+        }
+
     }
 }
