@@ -17,83 +17,130 @@ namespace AvanadeTarefasApi.Controllers
             _context = context;
         }
 
-        // todas as tarefas (admin)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
         {
-            return await _context.Tasks
-                .OrderBy(t => t.Completed)
-                .ThenByDescending(t => t.Id)
-                .ToListAsync();
+            try
+            {
+                return await _context.Tasks
+                    .OrderBy(t => t.Completed)
+                    .ThenByDescending(t => t.Id)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Erro ao carregar tarefas.", detail = ex.Message });
+            }
         }
 
-        // tarefas de um usuário específico
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasksByUser(int userId)
         {
-            var tasks = await _context.Tasks
-                .Where(t => t.UserId == userId)
-                .OrderBy(t => t.Completed)
-                .ThenByDescending(t => t.Id)
-                .ToListAsync();
+            try
+            {
+                var tasks = await _context.Tasks
+                    .Where(t => t.UserId == userId)
+                    .OrderBy(t => t.Completed)
+                    .ThenByDescending(t => t.Id)
+                    .ToListAsync();
 
-            return Ok(tasks);
+                return Ok(tasks);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Erro ao carregar tarefas do usuário.", detail = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<TaskItem>> GetTask(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
+            try
+            {
+                var task = await _context.Tasks.FindAsync(id);
 
-            if (task == null)
-                return NotFound();
+                if (task == null)
+                    return NotFound(new { message = "Tarefa não encontrada." });
 
-            return task;
+                return task;
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Erro ao buscar tarefa.", detail = ex.Message });
+            }
         }
 
         [HttpPost]
         public async Task<ActionResult<TaskItem>> CreateTask(TaskItem task)
         {
-            _context.Tasks.Add(task);
-            await _context.SaveChangesAsync();
+            if (string.IsNullOrWhiteSpace(task.Title) || string.IsNullOrWhiteSpace(task.Description))
+            {
+                return BadRequest(new { message = "Título e descrição são obrigatórios." });
+            }
 
-            return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
+            try
+            {
+                task.DtCriacao = DateTime.Now;
+                _context.Tasks.Add(task);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetTask), new { id = task.Id }, task);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Erro ao criar tarefa.", detail = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTask(int id, TaskItem task)
         {
             if (id != task.Id)
-                return BadRequest();
+                return BadRequest(new { message = "ID da tarefa não corresponde." });
+
+            if (string.IsNullOrWhiteSpace(task.Title) || string.IsNullOrWhiteSpace(task.Description))
+            {
+                return BadRequest(new { message = "Título e descrição são obrigatórios." });
+            }
 
             _context.Entry(task).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
+                return Ok(new { message = "Tarefa atualizada com sucesso!" });
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!_context.Tasks.Any(e => e.Id == id))
-                    return NotFound();
+                    return NotFound(new { message = "Tarefa não encontrada." });
                 else
                     throw;
             }
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Erro ao atualizar tarefa.", detail = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {
-            var task = await _context.Tasks.FindAsync(id);
-            if (task == null)
-                return NotFound();
+            try
+            {
+                var task = await _context.Tasks.FindAsync(id);
+                if (task == null)
+                    return NotFound(new { message = "Tarefa não encontrada." });
 
-            _context.Tasks.Remove(task);
-            await _context.SaveChangesAsync();
+                _context.Tasks.Remove(task);
+                await _context.SaveChangesAsync();
 
-            return NoContent();
+                return Ok(new { message = "Tarefa excluída com sucesso!" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Erro ao excluir tarefa.", detail = ex.Message });
+            }
         }
     }
 }

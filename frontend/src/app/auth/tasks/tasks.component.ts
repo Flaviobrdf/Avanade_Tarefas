@@ -17,7 +17,6 @@ export class TasksComponent implements OnInit {
   showModal = false;
   isEditing = false;
 
-  // objeto sempre inicializado
   selectedTask: Task = {
     id: 0,
     title: '',
@@ -33,24 +32,27 @@ export class TasksComponent implements OnInit {
 
   ngOnInit() {
     const userId = Number(localStorage.getItem('userId'));
-    this.taskService.getTasksByUser(userId).subscribe((tasks: Task[]) => {
-      this.tasks = tasks;
-      this.ordenarTarefas();
+    this.taskService.getTasksByUser(userId).subscribe({
+      next: (tasks: Task[]) => {
+        this.tasks = tasks;
+        this.ordenarTarefas();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar tarefas:', err);
+        alert('Erro ao carregar tarefas. Tente novamente.');
+      }
     });
   }
 
-
-  // ordenar tarefas: pendentes primeiro, concluídas depois
   private ordenarTarefas() {
     this.tasks.sort((a, b) => {
       if (a.completed !== b.completed) {
-        return a.completed ? 1 : -1; // pendentes primeiro
+        return a.completed ? 1 : -1;
       }
       return new Date(a.dtCriacao).getTime() - new Date(b.dtCriacao).getTime();
     });
   }
 
-  // abrir modal de criação
   openModal() {
     this.isEditing = false;
     this.selectedTask = {
@@ -64,7 +66,6 @@ export class TasksComponent implements OnInit {
     this.showModal = true;
   }
 
-  // abrir modal de edição
   editTask(task: Task) {
     this.isEditing = true;
     this.taskService.getTaskById(task.id).subscribe({
@@ -72,31 +73,45 @@ export class TasksComponent implements OnInit {
         this.selectedTask = data;
         this.showModal = true;
       },
-      error: (err) => console.error('Erro ao buscar tarefa:', err)
+      error: (err) => {
+        console.error('Erro ao buscar tarefa:', err);
+        alert('Erro ao carregar tarefa para edição.');
+      }
     });
   }
 
-  // salvar edição (PUT)
   saveEdit(event?: Event) {
     if (event) event.preventDefault();
-    if (this.selectedTask) {
-      this.taskService.updateTask(this.selectedTask).subscribe({
-        next: () => {
-          const index = this.tasks.findIndex(t => t.id === this.selectedTask.id);
-          if (index !== -1) {
-            this.tasks[index] = { ...this.selectedTask };
-          }
-          this.ordenarTarefas();
-          this.closeModal();
-        },
-        error: (err) => console.error('Erro ao atualizar tarefa:', err)
-      });
+
+    if (!this.selectedTask.title.trim() || !this.selectedTask.description.trim()) {
+      alert('Título e descrição são obrigatórios.');
+      return;
     }
+
+    this.taskService.updateTask(this.selectedTask).subscribe({
+      next: () => {
+        const index = this.tasks.findIndex(t => t.id === this.selectedTask.id);
+        if (index !== -1) {
+          this.tasks[index] = { ...this.selectedTask };
+        }
+        this.ordenarTarefas();
+        this.closeModal();
+        alert('Tarefa atualizada com sucesso!');
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar tarefa:', err);
+        alert('Erro ao atualizar tarefa. Tente novamente.');
+      }
+    });
   }
 
-  // criar nova tarefa
   addTask(title: string, description: string, event?: Event) {
     if (event) event.preventDefault();
+
+    if (!title.trim() || !description.trim()) {
+      alert('Título e descrição são obrigatórios.');
+      return;
+    }
 
     const userId = Number(localStorage.getItem('userId'));
     const newTask: Task = {
@@ -113,8 +128,8 @@ export class TasksComponent implements OnInit {
         this.tasks.push(task);
         this.ordenarTarefas();
         this.closeModal();
+        alert('Tarefa criada com sucesso!');
 
-        // rola até a última tarefa criada
         setTimeout(() => {
           const list = document.querySelector('.task-list');
           if (list) {
@@ -122,22 +137,38 @@ export class TasksComponent implements OnInit {
           }
         }, 100);
       },
-      error: (err) => console.error('Erro ao salvar tarefa:', err)
+      error: (err) => {
+        console.error('Erro ao salvar tarefa:', err);
+        alert('Erro ao salvar tarefa. Tente novamente.');
+      }
     });
   }
 
   toggleStatus(task: Task) {
     task.completed = !task.completed;
-    this.taskService.updateTask(task).subscribe(() => {
-      this.ordenarTarefas();
+    this.taskService.updateTask(task).subscribe({
+      next: () => {
+        this.ordenarTarefas();
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar status:', err);
+        alert('Erro ao atualizar status da tarefa.');
+      }
     });
   }
 
   deleteTask(task: Task) {
     const confirmed = window.confirm(`Tem certeza que deseja excluir a tarefa "${task.title}"?`);
     if (confirmed) {
-      this.taskService.deleteTask(task.id).subscribe(() => {
-        this.tasks = this.tasks.filter((t: Task) => t.id !== task.id);
+      this.taskService.deleteTask(task.id).subscribe({
+        next: () => {
+          this.tasks = this.tasks.filter((t: Task) => t.id !== task.id);
+          alert('Tarefa excluída com sucesso!');
+        },
+        error: (err) => {
+          console.error('Erro ao excluir tarefa:', err);
+          alert('Erro ao excluir tarefa. Tente novamente.');
+        }
       });
     }
   }
