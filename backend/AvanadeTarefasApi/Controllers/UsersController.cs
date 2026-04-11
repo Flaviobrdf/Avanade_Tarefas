@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using AvanadeTarefasApi.Data;
 using AvanadeTarefasApi.Models;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace AvanadeTarefasApi.Controllers
 {
@@ -25,10 +27,10 @@ namespace AvanadeTarefasApi.Controllers
             if (user == null)
                 return Unauthorized(new { message = "Usuário ou senha inválidos." });
 
-            // Retorna JSON estruturado
             var token = Guid.NewGuid().ToString();
             return Ok(new { token, username = user.Username });
         }
+
         [HttpPost("register")]
         public IActionResult Register([FromBody] User newUser)
         {
@@ -42,6 +44,20 @@ namespace AvanadeTarefasApi.Controllers
 
             return Ok(new { message = "Usuário registrado com sucesso!" });
         }
+
+        [HttpGet("{userId}/tasks")]
+        public async Task<ActionResult<IEnumerable<TaskItem>>> GetUserTasks(int userId)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.UserId == userId)
+                .OrderBy(t => t.Completed)
+                .ThenByDescending(t => t.Id)
+                .ToListAsync(); 
+
+            return Ok(tasks);
+        }
+
+
 
     }
 }

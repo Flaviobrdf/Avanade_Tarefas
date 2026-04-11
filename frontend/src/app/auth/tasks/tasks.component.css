@@ -16,39 +16,24 @@
   max-width: 600px;
 }
 
-
 .tasks-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   margin-bottom: 1.5rem;
+  gap: 1rem;
 }
 
 .tasks-header span {
-  flex: 1;
   text-align: center;
   font-size: 1.2rem;
   font-weight: bold;
 }
 
-.btn-secondary {
-  padding: 0.6rem 1.2rem;
-  background-color: #28a745; 
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background-color: #218838;
-}
-
 form {
   display: flex;
   flex-direction: column;
-  margin-right: 0;   
-  margin-left: 0;    
+  margin: 0;
 }
 
 .form-group {
@@ -68,20 +53,145 @@ form {
   padding: 0.6rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
+/* Botão concluir (pendente = amarelo, concluída = verde) */
+.btn-concluir {
+  padding: 0.6rem 1.2rem;
+  background-color: #ffc107; /* amarelo */
+  color: #000;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-concluir:hover {
+  background-color: #e0a800;
+}
 
-.btn-primary {
-  width: 100%;
-  padding: 0.8rem;
-  background-color: #007bff;
+.btn-reabrir {
+  padding: 0.6rem 1.2rem;
+  background-color: #28a745; /* verde */
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
+.btn-reabrir:hover {
+  background-color: #218838;
+}
 
+/* Botão editar (laranja) */
+.btn-editar {
+  padding: 0.6rem 1.2rem;
+  background-color: #fd7e14; /* laranja */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-editar:hover {
+  background-color: #e3640c;
+}
+
+/* Botão excluir (vermelho) */
+.btn-excluir {
+  padding: 0.6rem 1.2rem;
+  background-color: #dc3545; /* vermelho */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-excluir:hover {
+  background-color: #c82333;
+}
+
+/* Botões gerais (criar/cancelar) */
+.btn-primary {
+  padding: 0.6rem 1.2rem;
+  background-color: #007bff; /* azul */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 .btn-primary:hover {
   background-color: #0056b3;
+}
+
+.btn-secondary {
+  padding: 0.6rem 1.2rem;
+  background-color: #6c757d; /* cinza */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-list li {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.task-list h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.task-list p {
+  margin: 0 0 0.5rem 0;
+}
+
+.task-list span {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.task-list button {
+  margin-right: 0.5rem;
+}
+
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5); /* fundo escuro */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.modal-actions button {
+  margin-left: 10px;
 }

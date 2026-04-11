@@ -1,19 +1,78 @@
 <div class="tasks-header">
+  <button class="btn-primary" (click)="openModal()">Criar Tarefa</button>
   <span>Bem-vindo, {{ username }}</span>
   <button class="btn-secondary" (click)="logout()">Sair</button>
 </div>
 
-<form (ngSubmit)="addTask(title.value, description.value)">
-  <div class="form-group">
-    <label>Título</label>
-    <input type="text" #title required />
+<div *ngIf="tasks.length > 0; else noTasks">
+  <ul class="task-list">
+    <li *ngFor="let task of tasks">
+      <h3>{{ task.title }}</h3>
+      <hr>
+      <p>{{ task.description }}</p>
+      <hr>
+      <small>Criada em: {{ task.dtCriacao | date:'short' }}</small>
+      <hr>
+      <span>Status: {{ task.completed ? 'Concluída' : 'Pendente' }}</span>
+      <hr>
+      <button 
+        [ngClass]="task.completed ? 'btn-reabrir' : 'btn-concluir'" 
+        (click)="toggleStatus(task)">
+        {{ task.completed ? 'Reabrir' : 'Concluir' }}
+      </button>
+      <button class="btn-editar" (click)="editTask(task)">Editar</button>
+      <button class="btn-excluir" (click)="deleteTask(task)">Excluir</button>
+    </li>
+  </ul>
+</div>
+
+
+<!-- Modal de criação -->
+<div class="modal" *ngIf="showModal && !isEditing">
+  <div class="modal-content">
+    <h2>Criar Nova Tarefa</h2>
+    <form (submit)="addTask(newTitle.value, newDescription.value, $event)">
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" #newTitle name="newTitle" required />
+      </div>
+
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea #newDescription name="newDescription" required></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">Criar</button>
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <div class="form-group">
-    <label>Descrição</label>
-    <textarea #description required></textarea>
+<!-- Modal de edição -->
+<div class="modal" *ngIf="showModal && isEditing">
+  <div class="modal-content">
+    <h2>Editar Tarefa</h2>
+    <form (submit)="saveEdit($event)">
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" [(ngModel)]="selectedTask.title" name="title" required />
+      </div>
+
+      <div class="form-group">
+        <label>Descrição</label>
+        <textarea [(ngModel)]="selectedTask.description" name="description" required></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-primary">Salvar</button>
+        <button type="button" class="btn-secondary" (click)="closeModal()">Cancelar</button>
+      </div>
+    </form>
   </div>
+</div>
 
-  <button type="submit" class="btn-primary">Adicionar Tarefa</button>
-</form>
-
+<ng-template #noTasks>
+  <p>Nenhuma tarefa encontrada.</p>
+</ng-template>

@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:5184/api/users';
+  //private apiUrl = 'http://localhost:5184/api/users';
+  private apiUrl = 'http://localhost:5184/api/Auth';
 
   constructor(private http: HttpClient) {}
 

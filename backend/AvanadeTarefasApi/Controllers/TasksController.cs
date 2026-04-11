@@ -4,8 +4,6 @@ using AvanadeTarefasApi.Data;
 using AvanadeTarefasApi.Models;
 using System.Linq;
 
-
-
 namespace AvanadeTarefasApi.Controllers
 {
     [ApiController]
@@ -19,13 +17,27 @@ namespace AvanadeTarefasApi.Controllers
             _context = context;
         }
 
+        // todas as tarefas (admin)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
         {
             return await _context.Tasks
-                .OrderBy(t => t.IsCompleted)
-                .ThenByDescending(t => t.Id) // ou CreatedAt, se existir
+                .OrderBy(t => t.Completed)
+                .ThenByDescending(t => t.Id)
                 .ToListAsync();
+        }
+
+        // tarefas de um usuário específico
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasksByUser(int userId)
+        {
+            var tasks = await _context.Tasks
+                .Where(t => t.UserId == userId)
+                .OrderBy(t => t.Completed)
+                .ThenByDescending(t => t.Id)
+                .ToListAsync();
+
+            return Ok(tasks);
         }
 
         [HttpGet("{id}")]

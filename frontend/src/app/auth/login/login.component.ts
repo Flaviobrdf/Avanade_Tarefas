@@ -19,9 +19,24 @@ export class LoginComponent {
 
     this.authService.login(username, password).subscribe({
       next: (res: any) => {
+        console.log('Resposta do backend no login:', res);
         alert('Login realizado com sucesso!');
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('username', res.username); 
+
+        // sempre salva token e username
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+        }
+        if (res.username) {
+          localStorage.setItem('username', res.username);
+        }
+
+        // salva userId apenas se vier do backend
+        if (res.id !== undefined && res.id !== null) {
+          localStorage.setItem('userId', res.id.toString());
+        } else {
+          console.warn("Nenhum userId retornado pelo backend!");
+        }
+
         this.router.navigate(['/tasks']);
       },
       error: err => {
@@ -29,6 +44,9 @@ export class LoginComponent {
         console.error(err);
       }
     });
+
+
+
 
   }
 
